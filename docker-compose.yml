@@ -13,7 +13,7 @@ services:
         depends_on:
             - redis
         networks:
-            - sinpges
+            - livewire
 
     # db postgres
     db:
@@ -21,15 +21,15 @@ services:
         image: postgres
         restart: unless-stopped
         environment:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: sinpges
-            POSTGRES_DB: sinpges
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_DATABASE}
         ports:
-           - "5052:5432"
+           - 5052:5432
         volumes:
            - ./.docker/pg-data:/var/lib/postgresql/data
         networks:
-           - sinpges
+           - livewire
 
     # nginx web server
     nginx:
@@ -42,27 +42,15 @@ services:
             - ./:/var/www
             - ./docker/nginx:/etc/nginx/conf.d/
         networks:
-            - sinpges
+            - livewire
     # redis
     redis:
         container_name: redis-livewire
         image: redis:latest
         networks:
-            - sinpges
-    # adm db
-    pgadmin:
-        image: dpage/pgadmin4
-        container_name: pgAdmin-livewire
-        ports:
-            - 5050:80
-        volumes:
-            - ./.docker/pg-adm:/var/lib/pgadmin
-        environment:
-            PGADMIN_DEFAULT_EMAIL: sinpges@sinpges.com
-            PGADMIN_DEFAULT_PASSWORD: sinpges
-        networks:
-            - sinpges
+            - livewire
+
 
 networks:
-    sinpges:
+    livewire:
         driver: bridge
