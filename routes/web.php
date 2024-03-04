@@ -4,8 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\{
     ShowTweets
 };
+use App\Http\Livewire\User\{
+    UploadPhoto
+};
 
-Route::get('tweets', ShowTweets::class);
+Route::get('/upload', UploadPhoto::class)->name('upload.photo.user');
+Route::get('/tweets', ShowTweets::class)
+    ->name('tweets.index')
+    ->middleware('auth');
 
 Route::middleware([
     'auth:sanctum',
